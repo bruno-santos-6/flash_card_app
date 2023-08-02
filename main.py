@@ -4,11 +4,16 @@ from random import choice
 
 # ----------------- CONSTANTS -----------------
 BACKGROUND_COLOR = "#B1DDC6"
-
-# ----------------- FUNCTIONS -----------------
-csv = pd.read_csv("data/french_words.csv")
-to_learn = csv.to_dict(orient="records")
 current_card = {}
+to_learn = {}
+# ----------------- FUNCTIONS -----------------
+try:
+    csv = pd.read_csv("data/words_to_learn.csv")
+except FileNotFoundError:
+    original_data = pd.read_csv("data/french_words.csv")
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = csv.to_dict(orient="records")
 
 
 def next_card():
@@ -31,7 +36,7 @@ def is_known():
     to_learn.remove(current_card)
     print(len(to_learn))
     data = pd.DataFrame(to_learn)
-    data.to_csv("data/words_to_learn.csv")
+    data.to_csv("data/words_to_learn.csv", index=False)
     next_card()
 
 
